@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Find Your Perfect Fitness Recipe</h2>
+                <form method="POST" class="mb-4">
+                    {{ form.csrf_token }}
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.dietary_requirements.label }}</label>
+                        <select class="form-select" id="dietary_requirements" name="dietary_requirements" multiple>
+                            {% for value, label in form.dietary_requirements.choices %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Hold Ctrl/Cmd to select multiple options</div>
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if recipes %}
+        <div class="mt-4">
+            <h3 class="mb-3">Matching Recipes</h3>
+            <div class="row">
+                {% for recipe in recipes %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ recipe.name }}</h5>
+                            <p class="card-text">{{ recipe.description }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary">{{ recipe.calories }} calories</span>
+                                <span class="badge bg-success">{{ recipe.protein }}g protein</span>
+                            </div>
+                            <div class="mt-2">
+                                {% for req in recipe.dietary_requirements %}
+                                <span class="badge bg-info text-dark">{{ req.replace('_', ' ').title() }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
