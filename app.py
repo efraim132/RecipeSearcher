@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import User, load_recipes, add_recipe
-from forms import DietaryForm, LoginForm, RecipeForm, SignupForm  # Import forms from forms.py
+from models import User, load_recipes, add_recipe, remove_recipe
+from forms import DietaryForm, LoginForm, RecipeForm, SignupForm, RemoveRecipeForm  # Import forms from forms.py
 import os
 
 # Initialize the Flask application
@@ -88,6 +88,20 @@ def add_recipe_route():
         flash('Recipe added successfully!')
         return redirect(url_for('index'))
     return render_template('add_recipe.html', form=form)
+
+# Route for removing a recipe
+@app.route('/remove_recipe', methods=['GET', 'POST'])
+@login_required
+def remove_recipe_route():
+    form = RemoveRecipeForm()
+    if form.validate_on_submit():
+        recipe_name = form.recipe_name.data
+        if remove_recipe(recipe_name):
+            flash('Recipe removed successfully!')
+        else:
+            flash('Recipe not found.')
+        return redirect(url_for('index'))
+    return render_template('remove_recipe.html', form=form)
 
 # Main block to run the application
 if __name__ == '__main__':

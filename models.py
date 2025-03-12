@@ -75,4 +75,12 @@ def add_recipe(recipe):
     recipes = load_recipes()
     recipes.append(recipe)
     save_recipes(recipes)
-    return True 
+    return True
+
+def remove_recipe(recipe_name):
+    recipes = load_recipes()
+    updated_recipes = [recipe for recipe in recipes if recipe['name'] != recipe_name]
+    if len(updated_recipes) == len(recipes):
+        return False  # Recipe not found
+    save_recipes(updated_recipes)
+    return True
