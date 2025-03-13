@@ -3,10 +3,27 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 import os
 
-RECIPES_FILE = 'recipes.pkl'
-USERS_FILE = 'users.pkl'
+RECIPES_FILE = 'recipes.pkl' # File to store recipes
+USERS_FILE = 'users.pkl' # File to store users TODO: move this to a database
+
+
 
 class User(UserMixin):
+    """
+    A class representing a user.
+    Attributes:
+        username (str): The username of the user.
+        password_hash (str): The hashed password of the user.
+        id (str): The ID of the user, which is the same as the username.
+    Methods:
+        get(user_id):
+            Retrieves a user by their ID.
+        create(username, password):
+            Creates a new user with the given username and password.
+        check_password(password):
+            Checks if the provided password matches the stored hashed password.
+    """
+
     def __init__(self, username, password_hash):
         self.username = username
         self.password_hash = password_hash
@@ -30,6 +47,20 @@ class User(UserMixin):
         return check_password_hash(self.password_hash, password)
 
 def load_recipes():
+    """
+    Load recipes from a file if it exists, otherwise return a default list of recipes.
+    This function checks if a file specified by the global variable RECIPES_FILE exists.
+    If the file exists, it loads and returns the recipes from the file using the pickle module.
+    If the file does not exist, it returns a default list of recipes.
+    Returns:
+        list: A list of recipe dictionaries, each containing the following keys:
+            - 'name' (str): The name of the recipe.
+            - 'dietary_requirements' (list): A list of dietary requirement tags (e.g., 'high_protein', 'low_carb').
+            - 'calories' (int): The number of calories in the recipe.
+            - 'protein' (int): The amount of protein in grams.
+            - 'description' (str): A brief description of the recipe.
+    """
+
     if os.path.exists(RECIPES_FILE):
         with open(RECIPES_FILE, 'rb') as f:
             return pickle.load(f)
@@ -78,6 +109,14 @@ def add_recipe(recipe):
     return True
 
 def remove_recipe(recipe_name):
+    """
+    Removes a recipe by its name from the list of recipes.
+    Args:
+        recipe_name (str): The name of the recipe to be removed.
+    Returns:
+        bool: True if the recipe was found and removed, False if the recipe was not found.
+    """
+
     recipes = load_recipes()
     updated_recipes = [recipe for recipe in recipes if recipe['name'] != recipe_name]
     if len(updated_recipes) == len(recipes):
