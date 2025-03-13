@@ -2,7 +2,7 @@ import asciimatics.screen
 import asciimatics.scene
 import asciimatics.effects
 import asciimatics.widgets
-from asciimatics.widgets import Frame, ListBox, Layout, Divider, Label
+from asciimatics.widgets import Frame, ListBox, Layout, Divider, Label, VerticalDivider
 from asciimatics.screen import Screen
 from datetime import datetime
 import time
@@ -23,7 +23,7 @@ class DashboardFrame(Frame):
         )
         
         # Create the main layout
-        layout = Layout([1, 1, 1], fill_frame=True)
+        layout = Layout([1, 1 , 1, 1 , 1], fill_frame=True, gutter=1)
         self.add_layout(layout)
         
         # Left panel - Recipe Statistics
@@ -35,36 +35,38 @@ class DashboardFrame(Frame):
             self.recipe_labels.append(label)
             layout.add_widget(label, 0)
         
-        # Add vertical divider between Recipe Statistics and User Statistics
-        layout.add_widget(Divider(draw_line=True, height=screen.height), 0)
+        # TODO: Add vertical divider between Recipe Statistics and User Statistics
+        layout.add_widget(Divider(draw_line=False, height=screen.height), 1)
         
         # Middle panel - User Statistics
-        layout.add_widget(Label("User Statistics", align="^"), 1)
-        layout.add_widget(Divider(), 1)
+        layout.add_widget(Label("User Statistics", align="^"), 2)
+        layout.add_widget(Divider(), 2)
         self.user_labels = []
         for _ in range(3):  # Create labels for each stat
             label = Label("", align="^")
             self.user_labels.append(label)
-            layout.add_widget(label, 1)
+            layout.add_widget(label, 2)
         
         # Add vertical divider between User Statistics and Activity Log
-        layout.add_widget(Divider(draw_line=False, height=screen.height), 1)
+        layout.add_widget(Divider(draw_line=False, height=screen.height), 3)
         
         # Right panel - Activity Log
-        layout.add_widget(Label("Activity Log", align="^"), 2)
-        layout.add_widget(Divider(), 2)
+        layout.add_widget(Label("Activity Log", align="^"), 4)
+        layout.add_widget(Divider(), 4)
         self.log = ListBox(
             height=screen.height - 8,
             options=[],
             name="log"
         )
-        layout.add_widget(self.log, 2)
-        
+        layout.add_widget(self.log, 4)
+
         # Add a divider between sections
-        layout.add_widget(Divider(), 0)
-        layout.add_widget(Divider(), 1)
-        layout.add_widget(Divider(), 2)
+        # layout.add_widget(Divider(), 0)
+        # layout.add_widget(Divider(), 1)
+        # layout.add_widget(Divider(), 2)
         
+        # layout.add_widget(Divider(), 3)
+
         # Footer with timestamp
         self.timestamp = Label("", align="^")
         layout.add_widget(self.timestamp, 0)

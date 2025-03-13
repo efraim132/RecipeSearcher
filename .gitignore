@@ -10,3 +10,6 @@ __pycache__/app.cpython-39.pyc
 activity.log
 users.pkl
 __pycache__/dashboard.cpython-39.pyc
+__pycache__/dashboard.cpython-313.pyc
+__pycache__/forms.cpython-313.pyc
+__pycache__/models.cpython-313.pyc
